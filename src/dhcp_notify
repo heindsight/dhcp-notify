@@ -1,0 +1,62 @@
+#/bin/sh
+
+set -eu
+
+CONFIGFILE=/etc/dhcp_notify
+
+DEFAULT_EMAIL_SUBJECT='[dhcp-notify] DHCP Lease Notification'
+DEFAULT_MAILGUN_API_URL=https://api.mailgun.net/v3
+SCRIPT_NAME=${0##*/}
+
+load_config() {
+    errors=0
+
+    . "${CONFIGFILE}"
+
+    # Supply default values
+    MAILGUN_API_URL="${MAILGUN_API_URL:-${DEFAULT_MAILGUN_API_URL}}"
+    EMAIL_SUBJECT="${EMAIL_SUBJECT:-${DEFAULT_EMAIL_SUBJECT}}"
+
+    if [ -n "${MAILGUN_API_SECRET:-}" ]; then
+        printf '%s: Error: MAILGUN_API_SECRET not set.\n' "${SCRIPT_NAME}" >&2
+        errors=1
+    fi
+    if [ -n "${EMAIL_DOMAIN:-}" ]; then
+        printf '%s: Error: EMAIL_DOMAIN not set.\n' "${SCRIPT_NAME}" >&2
+        errors=1
+    fi
+    if [ -n "${EMAIL_FROM:-}" ]; then
+        printf '%s: Error: EMAIL_FROM not set.\n' "${SCRIPT_NAME}" >&2
+        errors=1
+    fi
+    if [ -n "${EMAIL_TO:-}" ]; then
+        printf '%s: Error: EMAIL_TO not set.\n' "${SCRIPT_NAME}" >&2
+        errors=1
+    fi
+
+    if [ ${errors} -gt 0 ]; then
+        exit 1
+    fi
+}
+
+
+send_email() {
+    message="$1"
+    credentials="api:${MAILGUN_API_KEY}"
+    email_send_url="${MAILGUN_API_URL%/}/${EMAIL_DOMAIN}/messages"
+
+    curl --fail -show-error --silent --user "${credentials}" --form "from=${EMAIL_FROM}" \
+        --form "to=${EMAIL_TO}" --form "subject=${EMAIL_SUBJECT}" --form "text=${message}" \
+        "${email_send_url}" > /dev/null
+}
+
+
+main() {
+    message="$*"
+
+    load_config
+    send_email "${message}"
+}
+
+
+main "$@"
