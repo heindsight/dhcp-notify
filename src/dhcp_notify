@@ -5,34 +5,29 @@ set -eu
 SCRIPT_NAME="${0##*/}"
 CONFIGFILE='/etc/dhcp_notify'
 
+# Default values for optional configs
 DEFAULT_EMAIL_SUBJECT='[dhcp-notify] DHCP Lease Notification'
 DEFAULT_MAILGUN_API_URL='https://api.mailgun.net/v3'
 
 load_config() {
     errors=0
+    optional_configs='MAILGUN_API_URL EMAIL_SUBJECT'
+    required_configs='MAILGUN_API_SECRET EMAIL_DOMAIN EMAIL_FROM EMAIL_TO'
 
     . "${CONFIGFILE}"
 
-    # Supply default values
-    MAILGUN_API_URL="${MAILGUN_API_URL:-${DEFAULT_MAILGUN_API_URL}}"
-    EMAIL_SUBJECT="${EMAIL_SUBJECT:-${DEFAULT_EMAIL_SUBJECT}}"
+    # Supply default values for optional configs
+    for varaname in ${optional_configs}; do
+        eval : "\${${varname}:=\${DEFAULT_${varname}}}"
+    done
 
-    if [ -n "${MAILGUN_API_SECRET:-}" ]; then
-        printf '%s: Error: MAILGUN_API_SECRET not set.\n' "${SCRIPT_NAME}" >&2
-        errors=1
-    fi
-    if [ -n "${EMAIL_DOMAIN:-}" ]; then
-        printf '%s: Error: EMAIL_DOMAIN not set.\n' "${SCRIPT_NAME}" >&2
-        errors=1
-    fi
-    if [ -n "${EMAIL_FROM:-}" ]; then
-        printf '%s: Error: EMAIL_FROM not set.\n' "${SCRIPT_NAME}" >&2
-        errors=1
-    fi
-    if [ -n "${EMAIL_TO:-}" ]; then
-        printf '%s: Error: EMAIL_TO not set.\n' "${SCRIPT_NAME}" >&2
-        errors=1
-    fi
+    # Print error  messages for missing required configs
+    for varname in ${required_configs}; do
+        if eval [ -n "\${${varname}:-}" ]; then
+            printf '%s: Error: %s is not set.\n' "${SCRIPT_NAME}" "${varname}" >&2
+            errors=$((errors+1))
+        fi
+    done
 
     if [ ${errors} -gt 0 ]; then
         exit 1
