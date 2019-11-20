@@ -2,11 +2,11 @@
 
 set -eu
 
-CONFIGFILE=/etc/dhcp_notify
+SCRIPT_NAME="${0##*/}"
+CONFIGFILE='/etc/dhcp_notify'
 
 DEFAULT_EMAIL_SUBJECT='[dhcp-notify] DHCP Lease Notification'
-DEFAULT_MAILGUN_API_URL=https://api.mailgun.net/v3
-SCRIPT_NAME=${0##*/}
+DEFAULT_MAILGUN_API_URL='https://api.mailgun.net/v3'
 
 load_config() {
     errors=0
