@@ -17,7 +17,7 @@ load_config() {
     . "${CONFIGFILE}"
 
     # Supply default values for optional configs
-    for varaname in ${optional_configs}; do
+    for varname in ${optional_configs}; do
         eval : "\${${varname}:=\${DEFAULT_${varname}}}"
     done
 
