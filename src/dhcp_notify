@@ -30,7 +30,8 @@ load_config() {
     done
 
     if [ ${errors} -gt 0 ]; then
-        exit 1
+        printf '%s: Failed to load config from "%s"\n' "${SCRIPT_NAME}" "${CONFIGFILE}"
+        return 1
     fi
 }
 
