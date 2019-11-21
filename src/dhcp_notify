@@ -12,7 +12,7 @@ DEFAULT_MAILGUN_API_URL='https://api.mailgun.net/v3'
 load_config() {
     errors=0
     optional_configs='MAILGUN_API_URL EMAIL_SUBJECT'
-    required_configs='MAILGUN_API_SECRET EMAIL_DOMAIN EMAIL_FROM EMAIL_TO'
+    required_configs='MAILGUN_API_KEY EMAIL_DOMAIN EMAIL_FROM EMAIL_TO'
 
     . "${CONFIGFILE}"
 
@@ -23,7 +23,7 @@ load_config() {
 
     # Print error  messages for missing required configs
     for varname in ${required_configs}; do
-        if eval [ -n "\${${varname}:-}" ]; then
+        if eval [ -z \"\${${varname}:-}\" ]; then
             printf '%s: Error: %s is not set.\n' "${SCRIPT_NAME}" "${varname}" >&2
             errors=$((errors+1))
         fi
