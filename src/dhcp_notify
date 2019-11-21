@@ -10,9 +10,9 @@ DEFAULT_EMAIL_SUBJECT='[dhcp-notify] DHCP Lease Notification'
 DEFAULT_MAILGUN_API_URL='https://api.mailgun.net/v3'
 
 load_config() {
-    errors=0
     optional_configs='MAILGUN_API_URL EMAIL_SUBJECT'
     required_configs='MAILGUN_API_KEY EMAIL_DOMAIN EMAIL_FROM EMAIL_TO'
+    missing_configs=''
 
     . "${CONFIGFILE}"
 
@@ -24,13 +24,14 @@ load_config() {
     # Print error  messages for missing required configs
     for varname in ${required_configs}; do
         if eval [ -z \"\${${varname}:-}\" ]; then
-            printf '%s: Error: %s is not set.\n' "${SCRIPT_NAME}" "${varname}" >&2
-            errors=$((errors+1))
+            sep="${missing_configs:+, }"
+            missing_configs="${missing_configs}${sep}${varname}"
         fi
     done
 
-    if [ ${errors} -gt 0 ]; then
-        printf '%s: Failed to load config from "%s"\n' "${SCRIPT_NAME}" "${CONFIGFILE}"
+    if [ -n "${missing_configs}" ]; then
+        printf '%s: Required configs not set in "%s": %s\n' \
+            "${SCRIPT_NAME}" "${CONFIGFILE}" "${missing_configs}" >&2
         return 1
     fi
 }
