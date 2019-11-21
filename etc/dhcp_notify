@@ -1,0 +1,18 @@
+# The mailgun api url (optional)
+# (set this to https://api.eu.mailgun.net/v3 if you use an EU mailgun domain)
+#MAILGUN_API_URL=https://api.mailgun.net/v3
+
+# Your mailgun API key
+#MAILGUN_API_KEY=secret
+
+# The email domain to use to send notifications
+#EMAIL_DOMAIN=example.com
+
+# The 'from' address for email notifications
+#EMAIL_FROM='DHCP Notifications <dhcp-notify@example.com>'
+
+# The 'to' address for email notifications
+#EMAIL_TO='DHCP Notifications <dhcp-notify@example.com>'
+
+# The subject line for notification emails (optional)
+#EMAIL_SUBJECT='[dhcp-notify] DHCP Lease Notification'
