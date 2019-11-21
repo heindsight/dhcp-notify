@@ -10,7 +10,7 @@ email (using using the [mailgun](https://www.mailgun.com/) rest api).
 
 Download and extract a tarball or clone the git repo and run
 
-    $ make install
+    $ sudo make install
 
 This will install the script to `/usr/local/bin/dhcp_notify` by default and put the configuration
 file at `/etc/dhcp_notify`.
