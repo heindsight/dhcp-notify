@@ -18,12 +18,12 @@ load_config() {
 
     # Supply default values for optional configs
     for varname in ${optional_configs}; do
-        eval : "\${${varname}:=\${DEFAULT_${varname}}}"
+        eval : '"${'"${varname}"':=${DEFAULT_'"${varname}"'}}"'
     done
 
     # Print error  messages for missing required configs
     for varname in ${required_configs}; do
-        if eval [ -z \"\${${varname}:-}\" ]; then
+        if eval [ -z '"${'"${varname}"':-}"' ]; then
             sep="${missing_configs:+, }"
             missing_configs="${missing_configs}${sep}${varname}"
         fi
