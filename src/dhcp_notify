@@ -36,7 +36,6 @@ load_config() {
     fi
 }
 
-
 send_email() {
     message="$1"
     credentials="api:${MAILGUN_API_KEY}"
@@ -52,13 +51,11 @@ send_email() {
         "${email_send_url}" > /dev/null
 }
 
-
 main() {
     message="$*"
 
     load_config
     send_email "${message}"
 }
-
 
 main "$@"
