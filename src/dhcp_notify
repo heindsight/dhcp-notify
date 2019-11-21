@@ -40,7 +40,7 @@ send_email() {
     credentials="api:${MAILGUN_API_KEY}"
     email_send_url="${MAILGUN_API_URL%/}/${EMAIL_DOMAIN}/messages"
 
-    curl --fail -show-error --silent --user "${credentials}" --form "from=${EMAIL_FROM}" \
+    curl --fail --show-error --silent --user "${credentials}" --form "from=${EMAIL_FROM}" \
         --form "to=${EMAIL_TO}" --form "subject=${EMAIL_SUBJECT}" --form "text=${message}" \
         "${email_send_url}" > /dev/null
 }

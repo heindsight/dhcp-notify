@@ -25,8 +25,8 @@ configuration file for guidance.
 
 Next you need to configure `dnsmasq` to run the script when leases are created, destroyed or
 changed.  You can do this by providing the `dhcp-script` option to `dnsmasq` with the path to the
-`dhcp_notify` scrip. You can either provide this in the `dnsmasq` configuration file (usually at
-`/etc/dnsmasq.conf`) eg:
+`dhcp_notify` script. You can either provide this in the `dnsmasq` configuration file (usually at
+`/etc/dnsmasq.conf`) e.g.:
 
     dhcp-script=/usr/local/bin/dhcp_notify
 
