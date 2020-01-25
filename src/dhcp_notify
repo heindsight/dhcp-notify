@@ -72,7 +72,7 @@ main() {
 
     if in_list "${mac}" "${IGNORE_MACS}"; then
         printf '%s: Ignoring "%s" event for MAC address "%s"\n' \
-            "${SCRIPT_NAME}" "${action}" "${mac}"
+            "${SCRIPT_NAME}" "${action}" "${mac}" >&2
         exit 0
     fi
 
