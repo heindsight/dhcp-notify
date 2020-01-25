@@ -8,9 +8,10 @@ CONFIGFILE='/etc/dhcp_notify'
 # Default values for optional configs
 DEFAULT_EMAIL_SUBJECT='[dhcp-notify] DHCP Lease Notification'
 DEFAULT_MAILGUN_API_URL='https://api.mailgun.net/v3'
+DEFAULT_IGNORE_MACS=''
 
 load_config() {
-    optional_configs='MAILGUN_API_URL EMAIL_SUBJECT'
+    optional_configs='MAILGUN_API_URL EMAIL_SUBJECT IGNORE_MACS'
     required_configs='MAILGUN_API_KEY EMAIL_DOMAIN EMAIL_FROM EMAIL_TO'
     missing_configs=''
 
@@ -51,10 +52,30 @@ send_email() {
         "${email_send_url}" > /dev/null
 }
 
+in_list() {
+    item="$1"
+    while [ $# -gt 1 ]; do
+        shift
+        if [ "${item}" = "$1" ]; then
+            return 0
+        fi
+    done
+    return 1
+}
+
 main() {
     message="$*"
+    action="$1"
+    mac="$2"
 
     load_config
+
+    if in_list "${mac}" "${IGNORE_MACS}"; then
+        printf '%s: Ignoring "%s" event for MAC address "%s"\n' \
+            "${SCRIPT_NAME}" "${action}" "${mac}"
+        exit 0
+    fi
+
     send_email "${message}"
 }
 
