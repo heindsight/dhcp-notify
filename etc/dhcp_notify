@@ -16,3 +16,6 @@
 
 # The subject line for notification emails (optional)
 #EMAIL_SUBJECT='[dhcp-notify] DHCP Lease Notification'
+
+# Space separated list of MAC addresses to ignore
+#IGNORE_MACS=''
