@@ -1,0 +1,19 @@
+# A list of MAC addresses to ignore
+#ignore_macs = []
+
+# The SMTP host port and TLS config
+[smtp]
+host = "smtp.example.com"
+#port = "465"
+#tls = "tls"
+
+# smtp credentials
+[smtp.credentials]
+username = "user@example.com"
+password = "secret"
+
+# email message config
+[message]
+from_addr = "DHCP Notifications <dhcp-notify@example.com>"
+to_addr = "DHCP Notifications <dhcp-notify@example.com>"
+#subject = "[dhcp-notify] DHCP Lease Notification"
