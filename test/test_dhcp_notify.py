@@ -41,7 +41,6 @@ def test_config_path():
 
 
 class TestDHCPNotification:
-
     @pytest.fixture(
         scope="class",
         params=[

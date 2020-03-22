@@ -1,5 +1,5 @@
-from unittest.mock import call
 from email.message import EmailMessage
+from unittest.mock import call
 
 import pytest
 
