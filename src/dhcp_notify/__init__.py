@@ -10,7 +10,7 @@ CONFIG_PATH = "/etc/dhcp_notify.toml"
 
 
 def main(args=None):
-    args = args or sys.argv[1:]
+    args=args or sys.argv[1:]
     cfg = config.load(CONFIG_PATH)
     process_event(args, cfg)
 
