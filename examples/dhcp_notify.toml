@@ -12,7 +12,7 @@ host = "smtp.example.com"
 #port = "465"
 #tls = "tls"
 
-# smtp credentials
+# smtp credentials (optional, omit for anonymous SMTP)
 [smtp.credentials]
 username = "user@example.com"
 password = "secret"
