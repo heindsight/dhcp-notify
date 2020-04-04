@@ -7,10 +7,10 @@ DHCP Notify
     Email notifications of dnsmasq_ dhcp events.
 
 .. image:: https://github.com/heindsight/dhcp-notify/workflows/Tests/badge.svg
+    :target: https://github.com/heindsight/dhcp-notify/actions?query=workflow%3ATests
 
 .. image:: https://img.shields.io/badge/code%20style-black-000000.svg
     :target: https://github.com/psf/black
-
 
 Installation
 ------------
