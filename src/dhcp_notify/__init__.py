@@ -4,7 +4,7 @@ import sys
 from . import config, email_notify
 
 
-__version__ = "0.0.1.dev0"
+__version__ = "0.0.1"
 
 CONFIG_PATH = "/etc/dhcp_notify.toml"
 
