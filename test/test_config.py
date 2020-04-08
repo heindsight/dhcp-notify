@@ -9,19 +9,12 @@ from . import prune_config
 
 
 class TestSMTPTLSConfig:
-    @pytest.fixture(scope="class", params=dhcp_notify_config.SMTPTLSConfig)
+    @pytest.fixture(scope="class", params=["off", "starttls", "tls"])
     def smtp_tls_setting(self, request):
         return request.param
 
-    @pytest.fixture(scope="class")
-    def smtp_config(self, smtp_config, smtp_tls_setting):
-        return {
-            **smtp_config,
-            "tls": smtp_tls_setting.value,
-        }
-
     def test_config_smtp_tls(self, loaded_config, smtp_tls_setting):
-        assert loaded_config.smtp.tls is smtp_tls_setting
+        assert loaded_config.smtp.tls.value == smtp_tls_setting
 
 
 class TestSMTPCredentialsConfig:

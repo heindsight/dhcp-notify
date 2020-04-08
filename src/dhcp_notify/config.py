@@ -51,7 +51,7 @@ class SMTPConfig(ConfigBase):
     host = attr.ib(validator=instance_of(str))
     port = attr.ib(default="465", validator=instance_of(str))
     tls = attr.ib(converter=SMTPTLSConfig, default="tls")
-    credentials = attr.ib(converter=optional(Credentials.from_dict), default=None,)
+    credentials = attr.ib(converter=optional(Credentials.from_dict), default=None)
 
 
 @attr.s(frozen=True)

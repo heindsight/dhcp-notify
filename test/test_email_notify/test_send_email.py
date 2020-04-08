@@ -3,17 +3,12 @@ from unittest.mock import call
 
 import pytest
 
-from dhcp_notify import config as dhcp_notify_config
 from dhcp_notify import email_notify
 
 from .. import prune_config
 
 
-SMTP_CLASS = {
-    dhcp_notify_config.SMTPTLSConfig.off: "SMTP",
-    dhcp_notify_config.SMTPTLSConfig.starttls: "SMTP",
-    dhcp_notify_config.SMTPTLSConfig.tls: "SMTP_SSL",
-}
+SMTP_CLASS = {"off": "SMTP", "starttls": "SMTP", "tls": "SMTP_SSL"}
 
 
 @pytest.fixture(scope="class")
@@ -26,7 +21,7 @@ def mock_smtp_lib(mocker):
     return mocker.patch("dhcp_notify.email_notify.smtplib", autospec=True)
 
 
-@pytest.fixture(scope="class", params=dhcp_notify_config.SMTPTLSConfig)
+@pytest.fixture(scope="class", params=["off", "starttls", "tls"])
 def smtp_tls_setting(request):
     return request.param
 
@@ -82,9 +77,9 @@ class TestStartTLS:
     @pytest.fixture(
         scope="class",
         params=(
-            pytest.param(dhcp_notify_config.SMTPTLSConfig.off, marks=pytest.mark.xfail),
-            pytest.param(dhcp_notify_config.SMTPTLSConfig.starttls),
-            pytest.param(dhcp_notify_config.SMTPTLSConfig.tls, marks=pytest.mark.xfail),
+            pytest.param("off", marks=pytest.mark.xfail),
+            pytest.param("starttls"),
+            pytest.param("tls", marks=pytest.mark.xfail),
         ),
     )
     def smtp_tls_setting(self, request):

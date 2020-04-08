@@ -14,7 +14,7 @@ def smtp_credentials():
 
 @pytest.fixture(scope="class")
 def smtp_tls_setting():
-    return dhcp_notify_config.SMTPTLSConfig.off
+    return "off"
 
 
 @pytest.fixture(scope="class")
@@ -22,7 +22,7 @@ def smtp_config(smtp_credentials, smtp_tls_setting):
     return {
         "host": "smtp.example.test",
         "port": "25",
-        "tls": smtp_tls_setting.value,
+        "tls": smtp_tls_setting,
         "credentials": smtp_credentials,
     }
 
