@@ -73,7 +73,16 @@ def test_message_subject(subject, loaded_config):
     scope="class",
 )
 def test_ignore_macs(ignore_macs, expected_macs, loaded_config):
-    assert sorted(loaded_config.ignore_macs) == sorted(expected_macs)
+    assert sorted(loaded_config.ignore_macs) == expected_macs
+
+
+@pytest.mark.parametrize(
+    "ignore_actions, expected_actions",
+    [([], []), (["dEl"], ["del"]), (["del", "OLD"], ["del", "old"])],
+    scope="class",
+)
+def test_ignore_actions(ignore_actions, expected_actions, loaded_config):
+    assert sorted(loaded_config.ignore_actions) == expected_actions
 
 
 class TestOptionalConfig:

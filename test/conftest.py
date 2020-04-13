@@ -73,19 +73,21 @@ def message_config(from_addr, to_addr, subject):
 
 @pytest.fixture(scope="class")
 def ignore_macs():
-    return [
-        "67:ad:98:cd:56:71",
-        "C2:02:EA:34:23:D0",
-        "96:56:A2:C3:B8:16",
-    ]
+    return []
 
 
 @pytest.fixture(scope="class")
-def config(smtp_config, message_config, ignore_macs):
+def ignore_actions():
+    return []
+
+
+@pytest.fixture(scope="class")
+def config(smtp_config, message_config, ignore_macs, ignore_actions):
     return {
         "smtp": smtp_config,
         "message": message_config,
         "ignore_macs": ignore_macs,
+        "ignore_actions": ignore_actions,
     }
 
 
