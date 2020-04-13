@@ -71,7 +71,7 @@ class TestDHCPNotification:
 
 
 class TestIgnoreMACs:
-    @pytest.fixture(scope="class", params=range(5))
+    @pytest.fixture(scope="class", params=range(3))
     def mac_address(self, ignore_macs, request):
         return ignore_macs[request.param]
 

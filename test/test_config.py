@@ -8,51 +8,87 @@ from dhcp_notify import config as dhcp_notify_config
 from . import prune_config
 
 
-class TestSMTPTLSConfig:
-    @pytest.fixture(scope="class", params=["off", "starttls", "tls"])
-    def smtp_tls_setting(self, request):
-        return request.param
+class TestSMTPHostConfig:
+    @pytest.mark.parametrize(
+        "smtp_host", ["smtp.example1.test", "smtp.example2.test"], scope="class",
+    )
+    def test_smtp_host(self, smtp_host, loaded_config):
+        assert loaded_config.smtp.host == smtp_host
 
-    def test_config_smtp_tls(self, loaded_config, smtp_tls_setting):
+
+class TestSMTPPortConfig:
+    @pytest.mark.parametrize("smtp_port", ["587", "465", "25"], scope="class")
+    def test_smtp_port(self, smtp_port, loaded_config):
+        assert loaded_config.smtp.port == smtp_port
+
+
+class TestSMTPTLSConfig:
+    @pytest.mark.parametrize(
+        "smtp_tls_setting", ["tls", "starttls", "off"], scope="class",
+    )
+    def test_smtp_tls(self, smtp_tls_setting, loaded_config):
         assert loaded_config.smtp.tls.value == smtp_tls_setting
 
 
-class TestSMTPCredentialsConfig:
-    def test_config_smtp_username(self, loaded_config):
-        assert loaded_config.smtp.credentials.username == "test-user"
-
-    def test_config_smtp_password(self, loaded_config):
-        assert loaded_config.smtp.credentials.password == "test-password"
-
-
-class TestSMTPConfig:
-    def test_config_smtp_host(self, loaded_config):
-        assert loaded_config.smtp.host == "smtp.example.test"
-
-    def test_config_smtp_port(self, loaded_config):
-        assert loaded_config.smtp.port == "25"
+class TestSMTPUserConfig:
+    @pytest.mark.parametrize(
+        "smtp_user", ["user@example.com", "user-test"], scope="class",
+    )
+    def test_smtp_username(self, smtp_user, loaded_config):
+        assert loaded_config.smtp.credentials.username == smtp_user
 
 
-class TestMessageConfig:
-    def test_config_message_from_addr(self, loaded_config):
-        assert loaded_config.message.from_addr == "Test <test-from@example.test>"
-
-    def test_config_message_to_addr(self, loaded_config):
-        assert loaded_config.message.to_addr == "Test <test-to@example.test>"
-
-    def test_config_message_subject(self, loaded_config):
-        assert loaded_config.message.subject == "Test Subject"
+class TestSMTPPasswordConfig:
+    @pytest.mark.parametrize(
+        "smtp_password", ["53cr37%", "secret"], scope="class",
+    )
+    def test_smtp_password(self, smtp_password, loaded_config):
+        assert loaded_config.smtp.credentials.password == smtp_password
 
 
-class TestTopLevelConfig:
-    def test_config_ignore_macs(self, loaded_config):
-        assert sorted(loaded_config.ignore_macs) == [
-            "28:84:1e:e7:29:91",
-            "2a:15:ed:3a:6a:47",
-            "67:ad:98:cd:56:71",
-            "96:56:a2:c3:b8:16",
-            "c2:02:ea:34:23:d0",
-        ]
+class TestMessageFromAddrConfig:
+    @pytest.mark.parametrize(
+        "from_addr",
+        ["test-from@example.test", "DHCP Test <test-from@example.test>"],
+        scope="class",
+    )
+    def test_message_from_addr(self, from_addr, loaded_config):
+        assert loaded_config.message.from_addr == from_addr
+
+
+class TestMessageToAddrConfig:
+    @pytest.mark.parametrize(
+        "to_addr",
+        ["test-to@example.test", "DHCP Test <test-to@example.test>"],
+        scope="class",
+    )
+    def test_message_to_addr(self, to_addr, loaded_config):
+        assert loaded_config.message.to_addr == to_addr
+
+
+class TestMessageSubjectConfig:
+    @pytest.mark.parametrize(
+        "subject", ["Testing", "Test 123", "Thıß is a teṣt"], scope="class",
+    )
+    def test_message_subject(self, subject, loaded_config):
+        assert loaded_config.message.subject == subject
+
+
+class TestIgnoreMACsConfig:
+    @pytest.mark.parametrize(
+        "ignore_macs, expected_macs",
+        [
+            ([], []),
+            (["28:84:1E:e7:29:91"], ["28:84:1e:e7:29:91"]),
+            (
+                ["67:ad:98:cd:56:71", "C2:02:EA:34:23:D0"],
+                ["67:ad:98:cd:56:71", "c2:02:ea:34:23:d0"],
+            ),
+        ],
+        scope="class",
+    )
+    def test_ignore_macs(self, ignore_macs, expected_macs, loaded_config):
+        assert sorted(loaded_config.ignore_macs) == sorted(expected_macs)
 
 
 class TestOptionalConfig:

@@ -5,11 +5,13 @@ from dhcp_notify import config as dhcp_notify_config
 
 
 @pytest.fixture(scope="class")
-def smtp_credentials():
-    return {
-        "username": "test-user",
-        "password": "test-password",
-    }
+def smtp_host():
+    return "smtp.example.test"
+
+
+@pytest.fixture(scope="class")
+def smtp_port():
+    return "25"
 
 
 @pytest.fixture(scope="class")
@@ -18,21 +20,54 @@ def smtp_tls_setting():
 
 
 @pytest.fixture(scope="class")
-def smtp_config(smtp_credentials, smtp_tls_setting):
+def smtp_user():
+    return "test-user"
+
+
+@pytest.fixture(scope="class")
+def smtp_password():
+    return "test-password"
+
+
+@pytest.fixture(scope="class")
+def smtp_credentials(smtp_user, smtp_password):
     return {
-        "host": "smtp.example.test",
-        "port": "25",
+        "username": smtp_user,
+        "password": smtp_password,
+    }
+
+
+@pytest.fixture(scope="class")
+def smtp_config(smtp_host, smtp_port, smtp_tls_setting, smtp_credentials):
+    return {
+        "host": smtp_host,
+        "port": smtp_port,
         "tls": smtp_tls_setting,
         "credentials": smtp_credentials,
     }
 
 
 @pytest.fixture(scope="class")
-def message_config():
+def from_addr():
+    return "Test <test-from@example.test>"
+
+
+@pytest.fixture(scope="class")
+def to_addr():
+    return "Test <test-to@example.test>"
+
+
+@pytest.fixture(scope="class")
+def subject():
+    return "Test Subject"
+
+
+@pytest.fixture(scope="class")
+def message_config(from_addr, to_addr, subject):
     return {
-        "from_addr": "Test <test-from@example.test>",
-        "to_addr": "Test <test-to@example.test>",
-        "subject": "Test Subject",
+        "from_addr": from_addr,
+        "to_addr": to_addr,
+        "subject": subject,
     }
 
 
@@ -40,8 +75,6 @@ def message_config():
 def ignore_macs():
     return [
         "67:ad:98:cd:56:71",
-        "2a:15:ed:3a:6a:47",
-        "28:84:1E:e7:29:91",
         "C2:02:EA:34:23:D0",
         "96:56:A2:C3:B8:16",
     ]
