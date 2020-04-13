@@ -70,7 +70,23 @@ class TestDHCPNotification:
         ]
 
 
-class TestIgnoreMACs:
+class IgnoreEventTestBase:
+    def test_no_message_composed(self, run_script, mock_make_email):
+        assert mock_make_email.call_args_list == []
+
+    def test_no_message_sent(self, run_script, mock_send_email):
+        assert mock_send_email.call_args_list == []
+
+
+class TestIgnoreMACs(IgnoreEventTestBase):
+    @pytest.fixture(scope="class")
+    def ignore_macs(self):
+        return [
+            "67:ad:98:cd:56:71",
+            "C2:02:EA:34:23:D0",
+            "96:56:A2:C3:B8:16",
+        ]
+
     @pytest.fixture(scope="class", params=range(3))
     def mac_address(self, ignore_macs, request):
         return ignore_macs[request.param]
@@ -79,8 +95,16 @@ class TestIgnoreMACs:
     def cmdline(self, mac_address):
         return f"add {mac_address} 192.0.2.13 test-host"
 
-    def test_no_message_composed(self, run_script, mock_make_email):
-        assert mock_make_email.call_args_list == []
 
-    def test_no_message_sent(self, run_script, mock_send_email):
-        assert mock_send_email.call_args_list == []
+class TestIgnoreActions(IgnoreEventTestBase):
+    @pytest.fixture(scope="class", params=["add", "del", "old"])
+    def action(self, request):
+        return request.param
+
+    @pytest.fixture(scope="class")
+    def cmdline(self, action):
+        return f"{action} 7D:0e:60:8C:81:13 192.0.2.13 test-host"
+
+    @pytest.fixture(scope="class")
+    def ignore_actions(self, action):
+        return [action]

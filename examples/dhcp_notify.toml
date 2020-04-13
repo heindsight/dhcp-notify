@@ -6,6 +6,9 @@
 # A list of MAC addresses to ignore
 #ignore_macs = []
 
+# A list of DHCP actions to ignore
+#ignore_actions = []
+
 # The SMTP host port and TLS config
 [smtp]
 host = "smtp.example.com"

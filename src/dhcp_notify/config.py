@@ -68,6 +68,9 @@ class Config(ConfigBase):
     ignore_macs = attr.ib(
         factory=tuple, converter=lambda l: tuple(s.lower() for s in l)
     )
+    ignore_actions = attr.ib(
+        factory=tuple, converter=lambda l: tuple(s.lower() for s in l)
+    )
 
 
 def load(config_path):

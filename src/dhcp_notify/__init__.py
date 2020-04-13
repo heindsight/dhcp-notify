@@ -18,10 +18,14 @@ def main(args=None):
 def process_event(args, cfg):
     action, mac, *_ = args
 
-    if mac.lower() in cfg.ignore_macs:
+    if ignored_event(action, mac, cfg):
         print(f"Ignoring {action} event for MAC address {mac}", file=sys.stderr)
         return
 
     notify_text = " ".join(args)
     msg = email_notify.make_email(msg_config=cfg.message, msg_text=notify_text)
     email_notify.send_email(smtp_config=cfg.smtp, message=msg)
+
+
+def ignored_event(action, mac, cfg):
+    return mac.lower() in cfg.ignore_macs or action.lower() in cfg.ignore_actions
