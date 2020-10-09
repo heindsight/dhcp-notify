@@ -56,14 +56,22 @@ class TestDHCPNotification:
         return request.param
 
     def test_composes_email(
-        self, run_script, mock_make_email, loaded_config, cmdline,
+        self,
+        run_script,
+        mock_make_email,
+        loaded_config,
+        cmdline,
     ):
         assert mock_make_email.call_args_list == [
             call(msg_config=loaded_config.message, msg_text=cmdline),
         ]
 
     def test_sends_email(
-        self, run_script, mock_make_email, mock_send_email, loaded_config,
+        self,
+        run_script,
+        mock_make_email,
+        mock_send_email,
+        loaded_config,
     ):
         assert mock_send_email.call_args_list == [
             call(smtp_config=loaded_config.smtp, message=mock_make_email.return_value),

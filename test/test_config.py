@@ -9,7 +9,9 @@ from . import prune_config
 
 
 @pytest.mark.parametrize(
-    "smtp_host", ["smtp.example1.test", "smtp.example2.test"], scope="class",
+    "smtp_host",
+    ["smtp.example1.test", "smtp.example2.test"],
+    scope="class",
 )
 def test_smtp_host(smtp_host, loaded_config):
     assert loaded_config.smtp.host == smtp_host
@@ -54,7 +56,9 @@ def test_message_to_addr(to_addr, loaded_config):
 
 
 @pytest.mark.parametrize(
-    "subject", ["Testing", "Test 123", "Thıß is a teṣt"], scope="class",
+    "subject",
+    ["Testing", "Test 123", "Thıß is a teṣt"],
+    scope="class",
 )
 def test_message_subject(subject, loaded_config):
     assert loaded_config.message.subject == subject
@@ -167,7 +171,8 @@ class TestSMTPCredentialsConfigRequired(RequiredConfigTestBase):
         return "Credentials"
 
     @pytest.fixture(
-        params=[["username"], ["password"], ["username", "password"]], scope="class",
+        params=[["username"], ["password"], ["username", "password"]],
+        scope="class",
     )
     def missing(self, request):
         return request.param
@@ -197,7 +202,8 @@ class TestMessageConfigRequired(RequiredConfigTestBase):
         return "MessageConfig"
 
     @pytest.fixture(
-        params=[["from_addr"], ["to_addr"], ["from_addr", "to_addr"]], scope="class",
+        params=[["from_addr"], ["to_addr"], ["from_addr", "to_addr"]],
+        scope="class",
     )
     def missing(self, request):
         return request.param
@@ -213,7 +219,8 @@ class TestTopLevelConfigRequired(RequiredConfigTestBase):
         return "Config"
 
     @pytest.fixture(
-        params=[["smtp"], ["message"], ["smtp", "message"]], scope="class",
+        params=[["smtp"], ["message"], ["smtp", "message"]],
+        scope="class",
     )
     def missing(self, request):
         return request.param
