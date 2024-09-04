@@ -1,4 +1,5 @@
 """Send notifications of dnsmasq dhcp events via email."""
+
 import sys
 
 from . import config, email_notify

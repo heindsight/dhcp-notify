@@ -66,10 +66,10 @@ class Config(ConfigBase):
     smtp = attr.ib(converter=SMTPConfig.from_dict)
     message = attr.ib(converter=MessageConfig.from_dict)
     ignore_macs = attr.ib(
-        factory=tuple, converter=lambda l: tuple(s.lower() for s in l)
+        factory=tuple, converter=lambda macs: tuple(mac.lower() for mac in macs)
     )
     ignore_actions = attr.ib(
-        factory=tuple, converter=lambda l: tuple(s.lower() for s in l)
+        factory=tuple, converter=lambda acts: tuple(act.lower() for act in acts)
     )
 
 
